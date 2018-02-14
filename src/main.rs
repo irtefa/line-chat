@@ -27,19 +27,8 @@ type Rx = mpsc::UnboundedReceiver<Bytes>;
 
 
 fn main() {
-    let addr: SocketAddr = match "127.0.0.1:6142".parse() {
-        Ok(socket) => socket,
-        Err(e) => {
-            panic!("Could not parse socket {:?}", e);
-        }
-    };
-    
-    let listener = match TcpListener::bind(&addr) {
-        Ok(listener) => listener,
-        Err(e) => {
-            panic!("Could not bind to the requested socket {:?}", e);
-        }
-    };
+    let addr: SocketAddr = "127.0.0.1:6142".parse().expect("Could not parse socket from given string");
+    let listener = TcpListener::bind(&addr).expect("Could not bind to the requested socket");
 
     let server = listener.incoming().for_each(move |socket| {
         // TODO: Process socket
